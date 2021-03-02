@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import firebase from '../../firebase'
+import firebase from "../../firebase";
 import { Link } from "react-router-dom";
 import {
   Grid,
@@ -18,19 +18,57 @@ const Register = () => {
     password: "",
     passwordConfirmation: "",
   });
+  const [error, setError] = useState([]);
 
-  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const isFormValid = () => {
+    if (isFormEmpty(formData)) {
+      setError([{ message: "Please fill in all fields" }]);
+      return false;
+    } else if (!isPasswordValid(formData)) {
+      setError([{ message: "Password is invalid" }]);
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const isFormEmpty = ({ userName, email, password, passwordConfirmation }) => {
+    return (
+      !userName.length ||
+      !email.length ||
+      !password.length ||
+      !passwordConfirmation.length
+    );
+  };
+  const isPasswordValid = ({ password, passwordConfirmation }) => {
+    if (password.length < 6 || passwordConfirmation.length < 6) {
+      return false;
+    } else if (password !== passwordConfirmation) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const displayError = (error) =>
+    error.map((err, i) => <p key={i}>{err.message}</p>);
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmitForm = async (e) => {
-		e.preventDefault();
-			try {
-        const newUser = await firebase.auth().createUserWithEmailAndPassword(email,password)
+    e.preventDefault();
+    if (isFormValid()) {
+      try {
+        const newUser = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password);
         console.log(newUser);
-			} catch (err) {
-				console.error(err);
-			}
-	}; 
-
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   const { userName, email, password, passwordConfirmation } = formData;
 
@@ -88,6 +126,12 @@ const Register = () => {
             </Button>
           </Segment>
         </Form>
+        {error.length > 0 && (
+          <Message error>
+            <h3>Error</h3>
+            {displayError(error)}
+          </Message>
+        )}
         <Message>
           Already a user? <Link to="/login">Login</Link>
         </Message>
