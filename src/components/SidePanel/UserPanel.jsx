@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Dropdown, Grid, Header, Icon } from "semantic-ui-react";
+import { Dropdown, Grid, Header, Icon, Image } from "semantic-ui-react";
 import { firebase } from "../../firebase";
 
 const UserPanel = (props) => {
   const [user] = useState(props.currentUser);
-
   const dropDownOptions = () => [
     {
       key: "user",
@@ -46,7 +45,12 @@ const UserPanel = (props) => {
         {/*User DropDown*/}
         <Header style={{ padding: "0.25em" }} as="h4" inverted>
           <Dropdown
-            trigger={<span>{user.displayName}</span>}
+            trigger={
+              <span>
+                <Image src={user.photoURL} spaced="right" avatar />
+                {user.displayName}
+              </span>
+            }
             options={dropDownOptions()}
           />
         </Header>
