@@ -1,11 +1,20 @@
-import './App.css';
+import React from "react";
+import { Grid } from "semantic-ui-react";
+import "./App.css";
+import ColorPanel from "./ColorPanel/ColorPanel";
+import Messages from "./Messages/Messages";
+import MetaPanel from "./MetaPanel/MetaPanel";
+import SidePanel from "./SidePanel/SidePanel";
 
-function App() {
+const App = () => {
   return (
-    <div>
-      Wellcome To Slack Chat APP
-    </div>
+    <Grid>
+      <ColorPanel />
+      <SidePanel />
+      <Messages />
+      <MetaPanel />
+    </Grid>
   );
-}
+};
 
 export default App;
