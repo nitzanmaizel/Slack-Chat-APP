@@ -25,8 +25,6 @@ const Root = (props) => {
   const isUserLogin = async () => {
     await firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log(user);
-        console.log(props.isLoading);
         props.setUser(user);
         props.history.push("/");
       } else {
