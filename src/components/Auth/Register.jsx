@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import firebase from "../../firebase";
+import { firebase, database } from "../../firebase";
 import { Link } from "react-router-dom";
 import {
   Grid,
@@ -10,6 +10,7 @@ import {
   Message,
   Icon,
 } from "semantic-ui-react";
+import md5 from "md5";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const Register = () => {
   });
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
+  // const [usersRef] = useState(firebase.database().ref("/users"));
 
   const isFormValid = () => {
     if (isFormEmpty(formData)) {
@@ -74,8 +76,19 @@ const Register = () => {
         const newUser = await firebase
           .auth()
           .createUserWithEmailAndPassword(email, password);
+
+        await newUser.user.updateProfile({
+          displayName: userName,
+          photoURL: `http://gravatar.com/avatar/${md5(
+            newUser.user.email
+          )}?d=identicon`,
+        });
+        await database.ref("/users").child(newUser.user.uid).set({
+          name: newUser.user.displayName,
+          avatar: newUser.user.photoURL,
+        });
         setLoading(false);
-        console.log(newUser);
+        console.log("User Is Sign In");
       } catch (err) {
         console.error("error", err);
         setLoading(false);
@@ -83,6 +96,13 @@ const Register = () => {
       }
     }
   };
+
+  // const saveUser = async (newUser) => {
+  //   return await usersRef.child(newUser.user.uid).set({
+  //     name: newUser.user.displayName,
+  //     avatar: newUser.user.photoURL,
+  //   });
+  // };
 
   const { userName, email, password, passwordConfirmation } = formData;
 
