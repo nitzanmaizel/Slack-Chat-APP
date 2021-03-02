@@ -18,6 +18,7 @@ const user_reducer = (state = initialUserState, action) => {
   }
 };
 
+// Will Update only the user state ==>
 const rootReducer = combineReducers({
   user: user_reducer,
 });
