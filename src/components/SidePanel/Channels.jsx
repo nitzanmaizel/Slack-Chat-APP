@@ -12,32 +12,33 @@
 //   const [channelsRef] = useState(database.ref("/channels"));
 //   const [user] = useState(props.currentUser);
 
+//   const addListeners = async () => {
+//     let channelsArry = [];
+//     await channelsRef.on("child_added", (snap) => {
+//       channelsArry.push(snap.val());
+//       setChannels(channelsArry);
+//       console.log(channelsArry.length > 0 ? channelsArry : "0 array");
+//     });
+//   };
+
 //   useEffect(() => {
 //     addListeners();
 //   }, []);
 
-//   const addListeners = () => {
-//     let channelsArry = [];
-//     channelsRef.on("child_added", (snap) => {
-//       channelsArry.push(snap.val());
-//       setChannels(channelsArry);
-//     });
+//   const displayChannels = (channels) => {
 //     console.log(channels);
+//     // channels.length > 0 &&
+//     //   channels.map((channel) => (
+//     //     <Menu.Item
+//     //       key={channel.id}
+//     //       onClick={() => console.log(channel)}
+//     //       name={channel.name}
+//     //       style={{ opacity: 0.7 }}
+//     //     >
+//     //       # {console.log(channel.name)}
+//     //     </Menu.Item>
+//     //   ));
 //   };
-
-//   // const displayChannels = (channels) => {
-//   //   channels.length > 0 &&
-//   //     channels.map((channel) => (
-//   //       <Menu.Item
-//   //         key={channel.id}
-//   //         onClick={() => console.log(channel)}
-//   //         name={channel.name}
-//   //         style={{ opacity: 0.7 }}
-//   //       >
-//   //         # {console.log(channel.name)}
-//   //       </Menu.Item>
-//   //     ));
-//   // };
 
 //   const addChannel = async ({ channelName, channelDetails }) => {
 //     try {
@@ -95,7 +96,8 @@
 //           </span>{" "}
 //           ({channels.length}) <Icon name="add" onClick={openModal} />
 //         </Menu.Item>
-//         {channels.length > 0 &&
+//         {displayChannels(channels)}
+//         {/* {channels.length > 0 &&
 //           channels.map((channel) => {
 //             return (
 //               <Menu.Item
@@ -107,7 +109,7 @@
 //                 # {channel.name}
 //               </Menu.Item>
 //             );
-//           })}
+//           })} */}
 //       </Menu.Menu>
 
 //       <Modal basic open={isOpen} onClose={closeModal}>
@@ -149,6 +151,8 @@
 
 import React from "react";
 import { database } from "../../firebase";
+import { connect } from "react-redux";
+import { setCurrentChannel } from "../../actions";
 import { Menu, Icon, Modal, Form, Input, Button } from "semantic-ui-react";
 
 class Channels extends React.Component {
@@ -212,12 +216,16 @@ class Channels extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  changeChannel = (channel) => {
+    this.props.setCurrentChannel(channel);
+  };
+
   displayChannels = (channels) =>
     channels.length > 0 &&
     channels.map((channel) => (
       <Menu.Item
         key={channel.id}
-        onClick={() => console.log(channel)}
+        onClick={() => this.changeChannel(channel)}
         name={channel.name}
         style={{ opacity: 0.7 }}
       >
@@ -286,4 +294,4 @@ class Channels extends React.Component {
   }
 }
 
-export default Channels;
+export default connect(null, { setCurrentChannel })(Channels);
