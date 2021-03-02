@@ -19,6 +19,7 @@ const Register = () => {
     passwordConfirmation: "",
   });
   const [error, setError] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const isFormValid = () => {
     if (isFormEmpty(formData)) {
@@ -53,6 +54,14 @@ const Register = () => {
   const displayError = (error) =>
     error.map((err, i) => <p key={i}>{err.message}</p>);
 
+  const handleInputError = (error, inputName) => {
+    return error.some((error) =>
+      error.message.toLowerCase().includes(inputName)
+    )
+      ? "error"
+      : "";
+  };
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -60,12 +69,17 @@ const Register = () => {
     e.preventDefault();
     if (isFormValid()) {
       try {
+        setLoading(true);
+        setError([]);
         const newUser = await firebase
           .auth()
           .createUserWithEmailAndPassword(email, password);
+        setLoading(false);
         console.log(newUser);
       } catch (err) {
-        console.error(err);
+        console.error("error", err);
+        setLoading(false);
+        setError([{ message: err.message }]);
       }
     }
   };
@@ -100,6 +114,7 @@ const Register = () => {
               type="email"
               value={email}
               onChange={(e) => onChange(e)}
+              className={handleInputError(error, "email")}
             />
             <Form.Input
               fluid
@@ -110,6 +125,7 @@ const Register = () => {
               type="password"
               value={password}
               onChange={(e) => onChange(e)}
+              className={handleInputError(error, "password")}
             />
             <Form.Input
               fluid
@@ -120,8 +136,15 @@ const Register = () => {
               type="password"
               value={passwordConfirmation}
               onChange={(e) => onChange(e)}
+              className={handleInputError(error, "password")}
             />
-            <Button color="orange" fluid size="large">
+            <Button
+              color="orange"
+              fluid
+              size="large"
+              disabled={loading}
+              className={loading ? "loading" : ""}
+            >
               Submit
             </Button>
           </Segment>
