@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 import App from './components/App.js';
 import Login from './components/Auth/Login.jsx';
 import Register from './components/Auth/Register.jsx';
 import reportWebVitals from './reportWebVitals';
-
 import 'semantic-ui-css/semantic.min.css'
 
 const Root = ()=>(
