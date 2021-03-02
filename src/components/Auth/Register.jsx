@@ -157,7 +157,7 @@ const Register = () => {
               disabled={loading}
               className={loading ? "loading" : ""}
             >
-              Submit
+              Register
             </Button>
           </Segment>
         </Form>
@@ -168,7 +168,7 @@ const Register = () => {
           </Message>
         )}
         <Message>
-          Already a user? <Link to="/login">Login</Link>
+          Already a user? <Link to="/login"> Login</Link>
         </Message>
       </Grid.Column>
     </Grid>
