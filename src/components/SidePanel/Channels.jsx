@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { database } from "../../firebase";
 import { Button, Form, Icon, Input, Menu, Modal } from "semantic-ui-react";
 
@@ -11,6 +11,17 @@ const Channels = (props) => {
   });
   const [channelsRef] = useState(database.ref("/channels"));
   const [user] = useState(props.currentUser);
+
+  useEffect(() => {
+    addListeners();
+  }, []);
+
+  const addListeners = async () => {
+    await channelsRef.on("child_added", (snap) => {
+      setChannels([...channels, channels.push(snap.val())]);
+      console.log(channels);
+    });
+  };
 
   const addChannel = async ({ channelName, channelDetails }) => {
     try {
