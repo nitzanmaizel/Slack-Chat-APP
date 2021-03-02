@@ -1,5 +1,6 @@
 import React from "react";
 import { Menu } from "semantic-ui-react";
+import UserPanel from "./UserPanel";
 
 const SidePanel = () => {
   return (
@@ -9,7 +10,9 @@ const SidePanel = () => {
       fixed="left"
       vertical
       style={{ background: "#4c3c4c", fontSize: "1.2rem" }}
-    ></Menu>
+    >
+      <UserPanel />
+    </Menu>
   );
 };
 
