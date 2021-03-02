@@ -12,11 +12,17 @@ import Login from "./components/Auth/Login.jsx";
 import Register from "./components/Auth/Register.jsx";
 import reportWebVitals from "./reportWebVitals";
 import "semantic-ui-css/semantic.min.css";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+const store = createStore(() => {}, composeWithDevTools());
 
 const Root = (props) => {
   const isUserLogin = async () => {
     await firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        console.log(user);
         props.history.push("/");
       }
     });
@@ -38,9 +44,11 @@ const Root = (props) => {
 const RootWithAuth = withRouter(Root);
 
 ReactDOM.render(
-  <Router>
-    <RootWithAuth />
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      <RootWithAuth />
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 
