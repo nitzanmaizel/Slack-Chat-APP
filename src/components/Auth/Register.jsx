@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import firebase from '../../firebase'
 import { Link } from "react-router-dom";
 import {
   Grid,
@@ -12,13 +13,24 @@ import {
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    userName: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
+    userName: "",
+    email: "",
+    password: "",
+    passwordConfirmation: "",
   });
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmitForm = async (e) => {
+		e.preventDefault();
+			try {
+        const newUser = await firebase.auth().createUserWithEmailAndPassword(email,password)
+        console.log(newUser);
+			} catch (err) {
+				console.error(err);
+			}
+	}; 
+
 
   const { userName, email, password, passwordConfirmation } = formData;
 
@@ -29,7 +41,7 @@ const Register = () => {
           <Icon name="puzzle piece" color="orange" />
           Register for DevChat
         </Header>
-        <Form size="large">
+        <Form onSubmit={onSubmitForm} size="large">
           <Segment stacked>
             <Form.Input
               fluid
@@ -40,7 +52,6 @@ const Register = () => {
               type="text"
               value={userName}
               onChange={(e) => onChange(e)}
-
             />
             <Form.Input
               fluid
@@ -51,7 +62,6 @@ const Register = () => {
               type="email"
               value={email}
               onChange={(e) => onChange(e)}
-
             />
             <Form.Input
               fluid
@@ -62,7 +72,6 @@ const Register = () => {
               type="password"
               value={password}
               onChange={(e) => onChange(e)}
-
             />
             <Form.Input
               fluid
@@ -73,7 +82,6 @@ const Register = () => {
               type="password"
               value={passwordConfirmation}
               onChange={(e) => onChange(e)}
-
             />
             <Button color="orange" fluid size="large">
               Submit
