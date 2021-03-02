@@ -41,19 +41,19 @@ const UserPanel = (props) => {
             <Icon name="code" />
             <Header.Content>DevChat</Header.Content>
           </Header>
+          {/*User DropDown*/}
+          <Header style={{ padding: "0.25em" }} as="h4" inverted>
+            <Dropdown
+              trigger={
+                <span>
+                  <Image src={user.photoURL} spaced="right" avatar />
+                  {user.displayName}
+                </span>
+              }
+              options={dropDownOptions()}
+            />
+          </Header>
         </Grid.Row>
-        {/*User DropDown*/}
-        <Header style={{ padding: "0.25em" }} as="h4" inverted>
-          <Dropdown
-            trigger={
-              <span>
-                <Image src={user.photoURL} spaced="right" avatar />
-                {user.displayName}
-              </span>
-            }
-            options={dropDownOptions()}
-          />
-        </Header>
       </Grid.Column>
     </Grid>
   );
