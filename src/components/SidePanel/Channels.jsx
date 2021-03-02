@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { firebase, database } from "../../firebase";
 import { Button, Form, Icon, Input, Menu, Modal } from "semantic-ui-react";
 
 const Channels = () => {
@@ -9,8 +10,22 @@ const Channels = () => {
     channelDetails: "",
   });
 
+  const isFormValid = ({ channelName, channelDetails }) =>
+    channelName && channelDetails;
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmitForm = async (e) => {
+    e.preventDefault();
+    if (isFormValid(formData)) {
+      try {
+        console.log("Channel Created");
+      } catch (err) {
+        console.error("error", err);
+      }
+    }
+  };
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -29,7 +44,7 @@ const Channels = () => {
       <Modal basic open={isOpen} onClose={closeModal}>
         <Modal.Header>Add a Channel</Modal.Header>
         <Modal.Content>
-          <Form>
+          <Form onSubmit={onSubmitForm}>
             <Form.Field>
               <Input
                 fluid
@@ -49,7 +64,7 @@ const Channels = () => {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="green" inverted>
+          <Button color="green" inverted onClick={onSubmitForm}>
             <Icon name="checkmark" /> Add
           </Button>
           <Button color="red" inverted onClick={closeModal}>
