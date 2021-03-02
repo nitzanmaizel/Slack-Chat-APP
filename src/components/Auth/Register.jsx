@@ -21,7 +21,6 @@ const Register = () => {
   });
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [usersRef] = useState(firebase.database().ref("/users"));
 
   const isFormValid = () => {
     if (isFormEmpty(formData)) {
@@ -88,7 +87,7 @@ const Register = () => {
           avatar: newUser.user.photoURL,
         });
         setLoading(false);
-        console.log("User Is Sign In");
+        console.log("User Saved To Database");
       } catch (err) {
         console.error("error", err);
         setLoading(false);
@@ -97,19 +96,12 @@ const Register = () => {
     }
   };
 
-  // const saveUser = async (newUser) => {
-  //   return await usersRef.child(newUser.user.uid).set({
-  //     name: newUser.user.displayName,
-  //     avatar: newUser.user.photoURL,
-  //   });
-  // };
-
   const { userName, email, password, passwordConfirmation } = formData;
 
   return (
     <Grid textAlign="center" verticalAlign="middle" className="app">
       <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" icon color="orange" textAlign="center">
+        <Header as="h1" icon color="orange" textAlign="center">
           <Icon name="puzzle piece" color="orange" />
           Register for DevChat
         </Header>
