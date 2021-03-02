@@ -4,8 +4,9 @@ import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import App from './components/App.js';
 import Login from './components/Auth/Login.jsx';
 import Register from './components/Auth/Register.jsx';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
+
+import 'semantic-ui-css/semantic.min.css'
 
 const Root = ()=>(
   <Router>
