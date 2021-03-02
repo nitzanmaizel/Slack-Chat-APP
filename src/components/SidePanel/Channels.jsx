@@ -1,14 +1,42 @@
 import React, { useState, Fragment } from "react";
-import { firebase, database } from "../../firebase";
+import { database } from "../../firebase";
 import { Button, Form, Icon, Input, Menu, Modal } from "semantic-ui-react";
 
-const Channels = () => {
+const Channels = (props) => {
   const [channels, setChannels] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     channelName: "",
     channelDetails: "",
   });
+  const [channelsRef] = useState(database.ref("/channels"));
+  const [user] = useState(props.currentUser);
+
+  const addChannel = async ({ channelName, channelDetails }) => {
+    try {
+      const key = channelsRef.push().key;
+
+      const newChannel = {
+        id: key,
+        name: channelName,
+        details: channelDetails,
+        createdBy: {
+          name: user.displayName,
+          avatar: user.photoURL,
+        },
+      };
+
+      await channelsRef.child(key).update(newChannel);
+      setFormData({
+        channelName: "",
+        channelDetails: "",
+      });
+      closeModal();
+      console.log("Channel added");
+    } catch (err) {
+      console.error("error", err);
+    }
+  };
 
   const isFormValid = ({ channelName, channelDetails }) =>
     channelName && channelDetails;
@@ -20,6 +48,7 @@ const Channels = () => {
     e.preventDefault();
     if (isFormValid(formData)) {
       try {
+        addChannel(formData);
         console.log("Channel Created");
       } catch (err) {
         console.error("error", err);
